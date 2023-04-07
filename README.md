@@ -3,9 +3,15 @@ NeoDash analysis of US Census 2017 CFS data
 
 Quick start
 
-* import the [dump file](https://drive.google.com/file/d/1qFGvkC4K55wIterbh_q_KklW1bCMfsVy/view?usp=share_link) into a Neo4j 5.5 database
+* aggregated shipments = > import the [totals dump file](https://drive.google.com/file/d/1aMLFukdmp7GmX2EQljDqIHddal5DIDgw/view?usp=share_link) into a Neo4j 5.5 database
 
-* open NeoDash, connect to Neo4j and import dashboard.json from this repo (you can save your changes back to Neo4j)
+-or-
+
+* all 6M shipments => import the [shipments dump file](https://drive.google.com/file/d/1qFGvkC4K55wIterbh_q_KklW1bCMfsVy/view?usp=share_link) into a Neo4j 5.5 database
+
+-next-
+
+* open NeoDash from the Neo4j desktop, connect to Neo4j and import dashboard.json from this repo (you can save your changes back to Neo4j)
 
 Build
 

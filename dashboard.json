@@ -1,0 +1,876 @@
+{
+  "title": "US Census Public Use Files: 2017 Commodity Flow Survey",
+  "version": "2.2",
+  "settings": {
+    "pagenumber": 4,
+    "editable": true,
+    "fullscreenEnabled": false,
+    "parameters": {
+      "neodash_product_description": "ALL",
+      "neodash_product_description_display": "ALL",
+      "neodash_metroarea_cfs_area": "",
+      "neodash_metroarea_cfs_area_display": "",
+      "neodash_metroarea_state_d": "ALL",
+      "neodash_metroarea_state_d_display": "ALL",
+      "neodash_metroarea_state_o": "ALL",
+      "neodash_metroarea_state_o_display": "ALL",
+      "neodash_state_name_o": "ALL",
+      "neodash_state_name_o_display": "ALL",
+      "neodash_naics_description": "ALL",
+      "neodash_naics_description_display": "ALL",
+      "neodash_state_name": "Texas",
+      "neodash_state_name_display": "Texas",
+      "neodash_state_name_d": "ALL",
+      "neodash_state_name_d_display": "ALL",
+      "neodash_mode_mode": "",
+      "neodash_mode_mode_display": "",
+      "neodash_mode_description": "Rail",
+      "neodash_mode_description_display": "Rail",
+      "neodash_metric_metric": "TOTAL_ANN_SHIPMENTS",
+      "neodash_metric_metric_display": "TOTAL_ANN_SHIPMENTS",
+      "undefined": "ALL",
+      "undefined_display": "ALL"
+    },
+    "downloadImageEnabled": true
+  },
+  "pages": [
+    {
+      "title": "Products",
+      "reports": [
+        {
+          "title": "Product Selector",
+          "query": "MATCH (n:`Product`) \nWHERE toLower(toString(n.`DESCRIPTION`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`DESCRIPTION` as value,  n.`DESCRIPTION` as display ORDER BY size(toString(value)) ASC LIMIT 50",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "type": "Node Property",
+            "entityType": "Product",
+            "suggestionLimit": 50,
+            "propertyType": "DESCRIPTION",
+            "propertyTypeDisplay": "DESCRIPTION",
+            "parameterName": "neodash_product_description",
+            "defaultValue": "ALL"
+          }
+        },
+        {
+          "title": "CFS Routes Graph",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path\n",
+          "width": 6,
+          "height": 3,
+          "x": 0,
+          "y": 1,
+          "type": "graph",
+          "selection": {
+            "MetroArea": "CFS_AREA"
+          },
+          "settings": {
+            "nodePositions": {},
+            "nodeColorScheme": "set1",
+            "relationshipParticles": true,
+            "layout": "force-directed",
+            "showPropertiesOnHover": true,
+            "refreshButtonEnabled": true,
+            "hideSelections": false,
+            "styleRules": [
+              {
+                "field": "",
+                "condition": "=",
+                "value": "",
+                "customization": "node color",
+                "customizationValue": "black"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Inter-Metro CFS Routes by Total Value, excludes Intra-Metro",
+          "query": "//MATCH (p:Product {DESCRIPTION:$neodash_product_description})\n//WITH p.SUBGRAPH AS rel\n//CALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE o <> d AND (o.STATE = ' +apoc.text.toCypher($neodash_metroarea_state_o)+ ' OR ' +apoc.text.toCypher($neodash_metroarea_state_o)+ ' = \"ALL\") AND (d.STATE = ' +apoc.text.toCypher($neodash_metroarea_state_d)+ ' OR ' +apoc.text.toCypher($neodash_metroarea_state_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 25',{}) YIELD value\n//RETURN value.path\nMATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE o<>d AND (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 25',{}) YIELD value\nRETURN value.path\n",
+          "width": 6,
+          "height": 3,
+          "x": 6,
+          "y": 1,
+          "type": "sankey",
+          "selection": {
+            "MetroArea": "DESCRIPTION"
+          },
+          "settings": {
+            "nodePositions": {},
+            "labelProperty": "TOTAL_ANN_VALUE",
+            "legend": false,
+            "refreshButtonEnabled": true,
+            "colors": "category10",
+            "downloadImageEnabled": true,
+            "labelOrientation": "horizontal",
+            "layout": "horizontal",
+            "fullscreenEnabled": true
+          }
+        },
+        {
+          "title": "CFS Routes by Total Value, includes Intra-Metro",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r,o,d ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path AS route, $neodash_product_description AS product, value.o.CFS_AREA AS orig_CFS_AREA, value.o.DESCRIPTION AS orig, value.d.CFS_AREA AS dest_CFS_AREA, value.d.DESCRIPTION AS dest, value.r.TOTAL_ANN_SHIPMENTS AS shipments, value.r.TOTAL_ANN_VALUE AS value\n",
+          "width": 12,
+          "height": 2,
+          "x": 0,
+          "y": 4,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Relationship Property",
+            "refreshButtonEnabled": true,
+            "allowDownload": true,
+            "compact": false,
+            "columnWidths": "[3,3,1,1,1,1,1,1]"
+          }
+        },
+        {
+          "title": "Origin",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "id": "o",
+            "manualPropertyNameSpecification": false,
+            "defaultValue": "ALL",
+            "clearParameterOnFieldClear": false,
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_o"
+          }
+        },
+        {
+          "title": "Destination",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "id": "d",
+            "defaultValue": "ALL",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d"
+          }
+        },
+        {
+          "title": "CFS Routes Map",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path, value.r\n\n\n\n",
+          "width": 12,
+          "height": 5,
+          "x": 0,
+          "y": 6,
+          "type": "map",
+          "selection": {
+            "MetroArea": "(no label)"
+          },
+          "settings": {
+            "nodePositions": {},
+            "nodeColorScheme": "set1",
+            "defaultNodeSize": "small",
+            "refreshButtonEnabled": true,
+            "clusterMarkers": false,
+            "defaultRelWidth": 1.5,
+            "defaultRelColor": "#666",
+            "downloadImageEnabled": true,
+            "layerType": "markers"
+          }
+        },
+        {
+          "title": "Total Value (USD Millions)",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "id": "d",
+            "defaultValue": "ALL",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d"
+          }
+        }
+      ]
+    },
+    {
+      "title": "NAICS",
+      "reports": [
+        {
+          "title": "NAICS Selector",
+          "query": "MATCH (n:`NAICS`) \nWHERE toLower(toString(n.`DESCRIPTION`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`DESCRIPTION` as value,  n.`DESCRIPTION` as display ORDER BY size(toString(value)) ASC LIMIT 100",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "type": "Node Property",
+            "entityType": "NAICS",
+            "suggestionLimit": 100,
+            "defaultValue": "ALL",
+            "propertyType": "DESCRIPTION",
+            "propertyTypeDisplay": "DESCRIPTION",
+            "parameterName": "neodash_naics_description"
+          }
+        },
+        {
+          "title": "CFS Routes Graph",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path\n",
+          "width": 6,
+          "height": 3,
+          "x": 0,
+          "y": 1,
+          "type": "graph",
+          "selection": {
+            "MetroArea": "CFS_AREA"
+          },
+          "settings": {
+            "nodePositions": {},
+            "nodeColorScheme": "set1",
+            "relationshipParticles": true,
+            "layout": "force-directed",
+            "showPropertiesOnHover": true,
+            "refreshButtonEnabled": true,
+            "hideSelections": false,
+            "styleRules": [
+              {
+                "field": "",
+                "condition": "=",
+                "value": "",
+                "customization": "node color",
+                "customizationValue": "black"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Inter-Metro CFS Routes by Total Value, excludes Intra-Metro",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE o<>d AND (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 15',{}) YIELD value\nRETURN value.path\n",
+          "width": 6,
+          "height": 3,
+          "x": 6,
+          "y": 1,
+          "type": "sankey",
+          "selection": {
+            "MetroArea": "DESCRIPTION"
+          },
+          "settings": {
+            "nodePositions": {},
+            "labelProperty": "TOTAL_ANN_VALUE",
+            "legend": false,
+            "refreshButtonEnabled": true,
+            "colors": "category10",
+            "downloadImageEnabled": true,
+            "labelOrientation": "horizontal",
+            "layout": "horizontal",
+            "fullscreenEnabled": true
+          }
+        },
+        {
+          "title": "CFS Routes by Total Value, includes Intra-Metro",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r,o,d ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path AS route, $neodash_naics_description AS NAICS, value.o.CFS_AREA AS orig_CFS_AREA, value.o.DESCRIPTION AS orig, value.d.CFS_AREA AS dest_CFS_AREA, value.d.DESCRIPTION AS dest, value.r.TOTAL_ANN_SHIPMENTS AS shipments, value.r.TOTAL_ANN_VALUE AS value\n",
+          "width": 12,
+          "height": 2,
+          "x": 0,
+          "y": 4,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Relationship Property",
+            "refreshButtonEnabled": true,
+            "allowDownload": true,
+            "compact": false,
+            "columnWidths": "[3,2,1,1,1,1,1,1]"
+          }
+        },
+        {
+          "title": "Origin",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "id": "o",
+            "manualPropertyNameSpecification": false,
+            "defaultValue": "ALL",
+            "clearParameterOnFieldClear": false,
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_o"
+          }
+        },
+        {
+          "title": "Destination",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "id": "d",
+            "defaultValue": "ALL",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d"
+          }
+        },
+        {
+          "title": "CFS Routes Map",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path, value.r\n\n\n\n",
+          "width": 12,
+          "height": 5,
+          "x": 0,
+          "y": 6,
+          "type": "map",
+          "selection": {
+            "MetroArea": "(no label)"
+          },
+          "settings": {
+            "nodePositions": {},
+            "nodeColorScheme": "set1",
+            "defaultNodeSize": "small",
+            "refreshButtonEnabled": true,
+            "clusterMarkers": false,
+            "defaultRelWidth": 1.5,
+            "defaultRelColor": "#666",
+            "downloadImageEnabled": true,
+            "layerType": "markers"
+          }
+        },
+        {
+          "title": "Total Value (USD Millions)",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "id": "d",
+            "defaultValue": "ALL",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Product Dependency Analysis",
+      "reports": [
+        {
+          "title": "Top 100 MSA Import Sources, Centrality by Total Annual Value",
+          "query": "MATCH path=(p:Product)-[c:CENTRALITY]-(m:MetroArea)<-[:HAS_MSA]-(s:State) \nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_product_description OR $neodash_product_description = \"ALL\")\nAND (s.NAME = $neodash_state_name_d OR $neodash_state_name_d = \"ALL\")\nRETURN path, s.NAME AS state, m.CFS_AREA AS CFS_Area, p.DESCRIPTION AS imported_product, c.PAGERANK_IMPORT AS import_pageRank ORDER BY c.PAGERANK_IMPORT DESC LIMIT 100\n",
+          "width": 12,
+          "height": 3,
+          "x": 0,
+          "y": 8,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "columnWidths": "[2,1,1,2,1]",
+            "refreshButtonEnabled": true
+          }
+        },
+        {
+          "title": "Total Import Value (USD Millions)",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)<-[r:'+rel+']-() WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name)+ ' OR ' +apoc.text.toCypher($neodash_state_name)+ ' = \"ALL\")  RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d",
+            "defaultValue": "ALL"
+          }
+        },
+        {
+          "title": "Top 100 MSAs Import Centrality by Total Annual Value",
+          "query": "MATCH path=(p:Product)-[c:CENTRALITY]-(m:MetroArea)<-[:HAS_MSA]-(s:State) \nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_product_description OR $neodash_product_description = \"ALL\")\nAND (s.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_IMPORT DESC LIMIT 100\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 0,
+          "y": 5,
+          "type": "graph",
+          "selection": {
+            "Product": "DESCRIPTION",
+            "MetroArea": "CFS_AREA",
+            "State": "STUSPS"
+          },
+          "settings": {
+            "nodePositions": {},
+            "layout": "force-directed",
+            "nodeColorScheme": "set1",
+            "refreshButtonEnabled": true
+          }
+        },
+        {
+          "title": "Top 25 MSAs Export Centrality by Total Annual Value",
+          "query": "MATCH path=(p:Product)-[c:CENTRALITY]->(m:MetroArea)\nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_product_description OR $neodash_product_description = \"ALL\")\nAND (m.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_IMPORT DESC LIMIT 25\n\n\n\n",
+          "width": 6,
+          "height": 4,
+          "x": 6,
+          "y": 1,
+          "type": "sankey",
+          "selection": {
+            "Product": "DESCRIPTION",
+            "MetroArea": "DESCRIPTION"
+          },
+          "settings": {
+            "nodePositions": {},
+            "labelProperty": "PAGERANK_EXPORT"
+          }
+        },
+        {
+          "title": "Product",
+          "query": "MATCH (n:`Product`) \nWHERE toLower(toString(n.`DESCRIPTION`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`DESCRIPTION` as value,  n.`DESCRIPTION` as display ORDER BY size(toString(value)) ASC LIMIT 50",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "Product",
+            "defaultValue": "ALL",
+            "propertyType": "DESCRIPTION",
+            "propertyTypeDisplay": "DESCRIPTION",
+            "parameterName": "neodash_product_description",
+            "suggestionLimit": 50
+          }
+        },
+        {
+          "title": "Top 25 MSAs Import Centrality by Total Annual Value",
+          "query": "MATCH path=(p:Product)-[c:CENTRALITY]->(m:MetroArea)\nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_product_description OR $neodash_product_description = \"ALL\")\nAND (m.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_IMPORT DESC LIMIT 25\n\n\n\n",
+          "width": 6,
+          "height": 4,
+          "x": 0,
+          "y": 1,
+          "type": "sankey",
+          "selection": {
+            "Product": "DESCRIPTION",
+            "MetroArea": "DESCRIPTION"
+          },
+          "settings": {
+            "nodePositions": {},
+            "labelProperty": "PAGERANK_IMPORT"
+          }
+        },
+        {
+          "title": "State",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name",
+            "defaultValue": "ALL"
+          }
+        },
+        {
+          "title": "Top 100 MSAs Export Centrality by Total Annual Value",
+          "query": "MATCH path=(p:Product)-[c:CENTRALITY]-(m:MetroArea)<-[:HAS_MSA]-(s:State) \nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_product_description OR $neodash_product_description = \"ALL\")\nAND (s.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_EXPORT DESC LIMIT 100\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 6,
+          "y": 5,
+          "type": "graph",
+          "selection": {
+            "Product": "DESCRIPTION",
+            "MetroArea": "CFS_AREA",
+            "State": "STUSPS"
+          },
+          "settings": {
+            "nodePositions": {},
+            "layout": "force-directed",
+            "nodeColorScheme": "set1",
+            "refreshButtonEnabled": true
+          }
+        },
+        {
+          "title": "Total Export Value (USD Millions)",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->() WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name)+ ' OR ' +apoc.text.toCypher($neodash_state_name)+ ' = \"ALL\")  RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d",
+            "defaultValue": "ALL"
+          }
+        }
+      ]
+    },
+    {
+      "title": "NAICS Dependency Analysis",
+      "reports": [
+        {
+          "title": "Top 100 MSA Import Sources, Centrality by Total Annual Value",
+          "query": "MATCH path=(p:NAICS)-[c:CENTRALITY]-(m:MetroArea)<-[:HAS_MSA]-(s:State) \nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_naics_description OR $neodash_naics_description = \"ALL\")\nAND (s.NAME = $neodash_state_name_d OR $neodash_state_name_d = \"ALL\")\nRETURN path, s.NAME AS state, m.CFS_AREA AS CFS_Area, p.DESCRIPTION AS imported_naics, c.PAGERANK_IMPORT AS import_pageRank ORDER BY c.PAGERANK_IMPORT DESC LIMIT 100\n",
+          "width": 12,
+          "height": 3,
+          "x": 0,
+          "y": 8,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "columnWidths": "[2,1,1,2,1]",
+            "refreshButtonEnabled": true
+          }
+        },
+        {
+          "title": "Total Import Value (USD Millions)",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)<-[r:'+rel+']-() WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name)+ ' OR ' +apoc.text.toCypher($neodash_state_name)+ ' = \"ALL\")  RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d",
+            "defaultValue": "ALL"
+          }
+        },
+        {
+          "title": "Top 100 MSAs Import Centrality by Total Annual Value",
+          "query": "MATCH path=(p:NAICS)-[c:CENTRALITY]-(m:MetroArea)<-[:HAS_MSA]-(s:State) \nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_naics_description OR $neodash_naics_description = \"ALL\")\nAND (s.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_IMPORT DESC LIMIT 100\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 0,
+          "y": 5,
+          "type": "graph",
+          "selection": {
+            "NAICS": "DESCRIPTION",
+            "MetroArea": "CFS_AREA",
+            "State": "STUSPS"
+          },
+          "settings": {
+            "nodePositions": {},
+            "layout": "force-directed",
+            "nodeColorScheme": "set1",
+            "refreshButtonEnabled": true
+          }
+        },
+        {
+          "title": "Top 25 MSAs Export Centrality by Total Annual Value",
+          "query": "MATCH path=(p:NAICS)-[c:CENTRALITY]->(m:MetroArea)\nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_naics_description OR $neodash_naics_description = \"ALL\")\nAND (m.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_IMPORT DESC LIMIT 25\n\n\n\n",
+          "width": 6,
+          "height": 4,
+          "x": 6,
+          "y": 1,
+          "type": "sankey",
+          "selection": {
+            "NAICS": "DESCRIPTION",
+            "MetroArea": "DESCRIPTION"
+          },
+          "settings": {
+            "nodePositions": {},
+            "labelProperty": "PAGERANK_EXPORT"
+          }
+        },
+        {
+          "title": "NAICS",
+          "query": "MATCH (n:`NAICS`) \nWHERE toLower(toString(n.`DESCRIPTION`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`DESCRIPTION` as value,  n.`DESCRIPTION` as display ORDER BY size(toString(value)) ASC LIMIT 50",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "NAICS",
+            "defaultValue": "ALL",
+            "suggestionLimit": 50,
+            "propertyType": "DESCRIPTION",
+            "propertyTypeDisplay": "DESCRIPTION",
+            "parameterName": "neodash_naics_description"
+          }
+        },
+        {
+          "title": "Top 25 MSAs Import Centrality by Total Annual Value",
+          "query": "MATCH path=(p:NAICS)-[c:CENTRALITY]->(m:MetroArea)\nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_naics_description OR $neodash_naics_description = \"ALL\")\nAND (m.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_IMPORT DESC LIMIT 25\n\n\n\n",
+          "width": 6,
+          "height": 4,
+          "x": 0,
+          "y": 1,
+          "type": "sankey",
+          "selection": {
+            "NAICS": "DESCRIPTION",
+            "MetroArea": "DESCRIPTION"
+          },
+          "settings": {
+            "nodePositions": {},
+            "labelProperty": "PAGERANK_IMPORT"
+          }
+        },
+        {
+          "title": "State",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name",
+            "defaultValue": "ALL"
+          }
+        },
+        {
+          "title": "Top 100 MSAs Export Centrality by Total Annual Value",
+          "query": "MATCH path=(p:NAICS)-[c:CENTRALITY]-(m:MetroArea)<-[:HAS_MSA]-(s:State) \nWHERE NOT p:Total \nAND (p.DESCRIPTION = $neodash_naics_description OR $neodash_naics_description = \"ALL\")\nAND (s.NAME = $neodash_state_name OR $neodash_state_name = \"ALL\")\nRETURN path ORDER BY c.PAGERANK_EXPORT DESC LIMIT 100\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 6,
+          "y": 5,
+          "type": "graph",
+          "selection": {
+            "NAICS": "DESCRIPTION",
+            "MetroArea": "CFS_AREA",
+            "State": "STUSPS"
+          },
+          "settings": {
+            "nodePositions": {},
+            "layout": "force-directed",
+            "nodeColorScheme": "set1",
+            "refreshButtonEnabled": true
+          }
+        },
+        {
+          "title": "Total Export Value (USD Millions)",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->() WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name)+ ' OR ' +apoc.text.toCypher($neodash_state_name)+ ' = \"ALL\")  RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d",
+            "defaultValue": "ALL"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Mode & Carbon Emissions",
+      "reports": [
+        {
+          "title": "Mode",
+          "query": "MATCH (n:`undefined`) \nWHERE toLower(toString(n.`undefined`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`undefined` as value,  n.`undefined` as display ORDER BY size(toString(value)) ASC LIMIT 25",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "defaultValue": "ALL",
+            "suggestionLimit": 25,
+            "clearParameterOnFieldClear": false
+          }
+        },
+        {
+          "title": "Origin",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_o",
+            "id": "o",
+            "defaultValue": "ALL"
+          }
+        },
+        {
+          "title": "Destination",
+          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "State",
+            "propertyType": "NAME",
+            "propertyTypeDisplay": "NAME",
+            "parameterName": "neodash_state_name_d",
+            "id": "d",
+            "defaultValue": "ALL",
+            "suggestionLimit": 5
+          }
+        },
+        {
+          "title": "Mode Distribution (All Shipments)",
+          "query": "MATCH (p:Mode)\nWHERE p.DESCRIPTION <> \"ALL\"\nWITH p.DESCRIPTION AS DESCRIPTION, p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN r.' +$neodash_metric_metric+ ' AS metric',{}) YIELD value\nRETURN DESCRIPTION, SUM(value.metric) AS METRIC\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 0,
+          "y": 1,
+          "type": "pie",
+          "selection": {
+            "key": "(none)",
+            "index": "DESCRIPTION",
+            "value": "METRIC"
+          },
+          "settings": {
+            "nodePositions": {},
+            "refreshButtonEnabled": true,
+            "sortByValue": true,
+            "downloadImageEnabled": true,
+            "enableArcLinkLabels": true,
+            "marginTop": 40,
+            "colors": "set1"
+          }
+        },
+        {
+          "title": "CFS Routes Graph by Metric",
+          "query": "MATCH (p:Mode {DESCRIPTION: $neodash_mode_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE o <> d AND (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path ORDER BY r.'+$neodash_metric_metric+' DESC LIMIT 100',{}) YIELD value\nRETURN value.path\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 6,
+          "y": 1,
+          "type": "graph",
+          "selection": {
+            "MetroArea": "DESCRIPTION"
+          },
+          "settings": {
+            "nodePositions": {},
+            "refreshButtonEnabled": true,
+            "sortByValue": true,
+            "downloadImageEnabled": true,
+            "enableArcLinkLabels": true,
+            "marginTop": 40,
+            "colors": "paired",
+            "labelProperty": "TOTAL_ANN_VALUE",
+            "nodeColorScheme": "set1",
+            "showPropertiesOnHover": false,
+            "relationshipParticles": true
+          }
+        },
+        {
+          "title": "Metric",
+          "query": "MATCH (n:`Metric`) \nWHERE toLower(toString(n.`METRIC`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`METRIC` as value,  n.`METRIC` as display ORDER BY size(toString(value)) ASC LIMIT 25",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "defaultValue": "ALL",
+            "suggestionLimit": 25,
+            "entityType": "Metric",
+            "propertyType": "METRIC",
+            "propertyTypeDisplay": "METRIC",
+            "parameterName": "neodash_metric_metric",
+            "clearParameterOnFieldClear": false
+          }
+        }
+      ]
+    }
+  ],
+  "parameters": {},
+  "extensions": {
+    "advanced-charts": true,
+    "styling": true,
+    "actions": true
+  }
+}

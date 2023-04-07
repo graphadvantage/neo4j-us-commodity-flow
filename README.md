@@ -14,3 +14,5 @@ Build
 * run the python notebooks to create the aggregating relationships for Product, NAICS and Mode from the raw :SHIPMENT relationship
 
 * run the queries in gds.cyp to compute Page Rank centrality for the CFS_AREA MSAs with respect to Product and NAICS for both import and export flows
+
+WIP - GHG emissions

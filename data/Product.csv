@@ -1,0 +1,45 @@
+_id|_labels|DESCRIPTION|SCTG|SUBGRAPH|YEAR|_start|_end|_type
+169|:Product|Animals and Fish (live)|SCTG_01|SCTG_01_2017_SHIPMENTS||||
+170|:Product|Cereal Grains (includes seed)|SCTG_02|SCTG_02_2017_SHIPMENTS||||
+171|:Product|Agricultural Products (excludes Animal Feed, Cereal Grains, and Forage Products)|SCTG_03|SCTG_03_2017_SHIPMENTS||||
+172|:Product|Animal Feed, Eggs, Honey, and Other Products of Animal Origin|SCTG_04|SCTG_04_2017_SHIPMENTS||||
+173|:Product|Meat, Poultry, Fish, Seafood, and Their Preparations|SCTG_05|SCTG_05_2017_SHIPMENTS||||
+174|:Product|Milled Grain Products and Preparations, and Bakery Products|SCTG_06|SCTG_06_2017_SHIPMENTS||||
+175|:Product|Other Prepared Foodstuffs, and Fats and Oils|SCTG_07|SCTG_07_2017_SHIPMENTS||||
+176|:Product|Alcoholic Beverages and Denatured Alcohol|SCTG_08|SCTG_08_2017_SHIPMENTS||||
+177|:Product|Tobacco Products|SCTG_09|SCTG_09_2017_SHIPMENTS||||
+178|:Product|Monumental or Building Stone|SCTG_10|SCTG_10_2017_SHIPMENTS||||
+179|:Product|Natural Sands|SCTG_11|SCTG_11_2017_SHIPMENTS||||
+180|:Product|Gravel and Crushed Stone (excludes Dolomite and Slate)|SCTG_12|SCTG_12_2017_SHIPMENTS||||
+181|:Product|Other Non-Metallic Minerals not elsewhere classified|SCTG_13|SCTG_13_2017_SHIPMENTS||||
+182|:Product|Metallic Ores and Concentrates|SCTG_14|SCTG_14_2017_SHIPMENTS||||
+183|:Product|Coal|SCTG_15|SCTG_15_2017_SHIPMENTS||||
+184|:Product|Crude Petroleum|SCTG_16|SCTG_16_2017_SHIPMENTS||||
+185|:Product|Gasoline, Aviation Turbine Fuel, and Ethanol (includes Kerosene, and Fuel Alcohols)|SCTG_17|SCTG_17_2017_SHIPMENTS||||
+186|:Product|Fuel Oils (includes Diesel, Bunker C, and Biodiesel)|SCTG_18|SCTG_18_2017_SHIPMENTS||||
+187|:Product|Other Coal and Petroleum Products, not elsewhere classified|SCTG_19|SCTG_19_2017_SHIPMENTS||||
+188|:Product|Basic Chemicals|SCTG_20|SCTG_20_2017_SHIPMENTS||||
+189|:Product|Pharmaceutical Products|SCTG_21|SCTG_21_2017_SHIPMENTS||||
+190|:Product|Fertilizers|SCTG_22|SCTG_22_2017_SHIPMENTS||||
+191|:Product|Other Chemical Products and Preparations|SCTG_23|SCTG_23_2017_SHIPMENTS||||
+192|:Product|Plastics and Rubber|SCTG_24|SCTG_24_2017_SHIPMENTS||||
+193|:Product|Logs and Other Wood in the Rough|SCTG_25|SCTG_25_2017_SHIPMENTS||||
+194|:Product|Wood Products|SCTG_26|SCTG_26_2017_SHIPMENTS||||
+195|:Product|Pulp, Newsprint, Paper, and Paperboard|SCTG_27|SCTG_27_2017_SHIPMENTS||||
+196|:Product|Paper or Paperboard Articles|SCTG_28|SCTG_28_2017_SHIPMENTS||||
+197|:Product|Printed Products|SCTG_29|SCTG_29_2017_SHIPMENTS||||
+198|:Product|Textiles, Leather, and Articles of Textiles or Leather|SCTG_30|SCTG_30_2017_SHIPMENTS||||
+199|:Product|Non-Metallic Mineral Products|SCTG_31|SCTG_31_2017_SHIPMENTS||||
+200|:Product|Base Metal in Primary or Semi-Finished Forms and in Finished Basic Shapes|SCTG_32|SCTG_32_2017_SHIPMENTS||||
+201|:Product|Articles of Base Metal|SCTG_33|SCTG_33_2017_SHIPMENTS||||
+202|:Product|Machinery|SCTG_34|SCTG_34_2017_SHIPMENTS||||
+203|:Product|Electronic and Other Electrical Equipment and Components, and Office Equipment|SCTG_35|SCTG_35_2017_SHIPMENTS||||
+204|:Product|Motorized and Other Vehicles (includes parts)|SCTG_36|SCTG_36_2017_SHIPMENTS||||
+205|:Product|Transportation Equipment, not elsewhere classified|SCTG_37|SCTG_37_2017_SHIPMENTS||||
+206|:Product|Precision Instruments and Apparatus|SCTG_38|SCTG_38_2017_SHIPMENTS||||
+207|:Product|Furniture, Mattresses and Mattress Supports, Lamps, Lighting Fittings, and Illuminated Signs|SCTG_39|SCTG_39_2017_SHIPMENTS||||
+208|:Product|Miscellaneous Manufactured Products|SCTG_40|SCTG_40_2017_SHIPMENTS||||
+209|:Product|Waste and Scrap (excludes of agriculture or food, see 041xx)|SCTG_41|SCTG_41_2017_SHIPMENTS||||
+210|:Product|Commodity code suppressed|SCTG_00|SCTG_00_2017_SHIPMENTS||||
+277|:Mode:NAICS:Product:Total|ALL||TOTAL_2017_SHIPMENTS|2017|||
+336|:Product|Mixed Freight|SCTG_43|||||

@@ -1,0 +1,23 @@
+_id|_labels|DESCRIPTION|MODE|SUBGRAPH|YEAR|_start|_end|_type
+256|:Mode|Single mode|MODE_02|MODE_02_2017_SHIPMENTS||||
+257|:Mode|Truck|MODE_03|MODE_03_2017_SHIPMENTS||||
+258|:Mode|For-hire truck|MODE_04|MODE_04_2017_SHIPMENTS||||
+259|:Mode|Company-owned truck|MODE_05|MODE_05_2017_SHIPMENTS||||
+260|:Mode|Rail|MODE_06|MODE_06_2017_SHIPMENTS||||
+261|:Mode|Water|MODE_07|MODE_07_2017_SHIPMENTS||||
+262|:Mode|Inland Water|MODE_08|MODE_08_2017_SHIPMENTS||||
+263|:Mode|Great Lakes|MODE_09|MODE_09_2017_SHIPMENTS||||
+264|:Mode|Deep Sea|MODE_10|MODE_10_2017_SHIPMENTS||||
+265|:Mode|Multiple Waterways|MODE_101|MODE_101_2017_SHIPMENTS||||
+266|:Mode|Air (incl truck & air)|MODE_11|MODE_11_2017_SHIPMENTS||||
+267|:Mode|Pipeline|MODE_12|MODE_12_2017_SHIPMENTS||||
+268|:Mode|Other mode|MODE_19|MODE_19_2017_SHIPMENTS||||
+269|:Mode|Multiple mode|MODE_13|MODE_13_2017_SHIPMENTS||||
+270|:Mode|Parcel, USPS, or courier|MODE_14|MODE_14_2017_SHIPMENTS||||
+271|:Mode|Non-parcel multiple mode|MODE_20|MODE_20_2017_SHIPMENTS||||
+272|:Mode|Truck and rail|MODE_15|MODE_15_2017_SHIPMENTS||||
+273|:Mode|Truck and water|MODE_16|MODE_16_2017_SHIPMENTS||||
+274|:Mode|Rail and water|MODE_17|MODE_17_2017_SHIPMENTS||||
+275|:Mode|Other multiple mode|MODE_18|MODE_18_2017_SHIPMENTS||||
+276|:Mode|Mode suppressed|MODE_00|MODE_00_2017_SHIPMENTS||||
+277|:Mode:NAICS:Product:Total|ALL||TOTAL_2017_SHIPMENTS|2017|||

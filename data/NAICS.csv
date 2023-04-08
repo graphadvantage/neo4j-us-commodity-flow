@@ -1,0 +1,47 @@
+_id|_labels|DESCRIPTION|NAICS|SUBGRAPH|YEAR|_start|_end|_type
+211|:NAICS|Mining (except oil and gas)|212|NAICS_212_2017_SHIPMENTS||||
+212|:NAICS|Food manufacturing|311|NAICS_311_2017_SHIPMENTS||||
+213|:NAICS|Beverage and tobacco product manufacturing|312|NAICS_312_2017_SHIPMENTS||||
+214|:NAICS|Textile mills|313|NAICS_313_2017_SHIPMENTS||||
+215|:NAICS|Textile product mills|314|NAICS_314_2017_SHIPMENTS||||
+216|:NAICS|Apparel manufacturing|315|NAICS_315_2017_SHIPMENTS||||
+217|:NAICS|Leather and allied product manufacturing|316|NAICS_316_2017_SHIPMENTS||||
+218|:NAICS|Wood product manufacturing|321|NAICS_321_2017_SHIPMENTS||||
+219|:NAICS|Paper manufacturing|322|NAICS_322_2017_SHIPMENTS||||
+220|:NAICS|Printing and related support activities|323|NAICS_323_2017_SHIPMENTS||||
+221|:NAICS|Petroleum and coal products manufacturing|324|NAICS_324_2017_SHIPMENTS||||
+222|:NAICS|Chemical manufacturing|325|NAICS_325_2017_SHIPMENTS||||
+223|:NAICS|Plastics and rubber products manufacturing|326|NAICS_326_2017_SHIPMENTS||||
+224|:NAICS|Nonmetallic mineral product manufacturing|327|NAICS_327_2017_SHIPMENTS||||
+225|:NAICS|Primary metal manufacturing|331|NAICS_331_2017_SHIPMENTS||||
+226|:NAICS|Fabricated metal product manufacturing|332|NAICS_332_2017_SHIPMENTS||||
+227|:NAICS|Machinery manufacturing|333|NAICS_333_2017_SHIPMENTS||||
+228|:NAICS|Computer and electronic product manufacturing|334|NAICS_334_2017_SHIPMENTS||||
+229|:NAICS|Electrical equipment, appliance, and component manufacturing|335|NAICS_335_2017_SHIPMENTS||||
+230|:NAICS|Transportation equipment manufacturing|336|NAICS_336_2017_SHIPMENTS||||
+231|:NAICS|Furniture and related product manufacturing|337|NAICS_337_2017_SHIPMENTS||||
+232|:NAICS|Miscellaneous manufacturing|339|NAICS_339_2017_SHIPMENTS||||
+233|:NAICS|Motor vehicle and parts merchant wholesalers|4231|NAICS_4231_2017_SHIPMENTS||||
+234|:NAICS|Furniture and home furnishing merchant wholesalers|4232|NAICS_4232_2017_SHIPMENTS||||
+235|:NAICS|Lumber and other construction materials merchant wholesalers|4233|NAICS_4233_2017_SHIPMENTS||||
+236|:NAICS|Commercial equip. merchant wholesalers|4234|NAICS_4234_2017_SHIPMENTS||||
+237|:NAICS|Metal and mineral (except petroleum) merchant wholesalers|4235|NAICS_4235_2017_SHIPMENTS||||
+238|:NAICS|Electrical and electronic goods merchant wholesalers|4236|NAICS_4236_2017_SHIPMENTS||||
+239|:NAICS|Hardware and plumbing merchant wholesalers|4237|NAICS_4237_2017_SHIPMENTS||||
+240|:NAICS|Machinery, equipment, and supplies merchant wholesalers|4238|NAICS_4238_2017_SHIPMENTS||||
+241|:NAICS|Miscellaneous durable goods merchant wholesalers|4239|NAICS_4239_2017_SHIPMENTS||||
+242|:NAICS|Paper and paper product merchant wholesalers|4241|NAICS_4241_2017_SHIPMENTS||||
+243|:NAICS|Drugs and druggists' sundries merchant wholesalers|4242|NAICS_4242_2017_SHIPMENTS||||
+244|:NAICS|Apparel, piece goods, and notions merchant wholesalers|4243|NAICS_4243_2017_SHIPMENTS||||
+245|:NAICS|Grocery and related product merchant wholesalers|4244|NAICS_4244_2017_SHIPMENTS||||
+246|:NAICS|Farm product raw material merchant wholesalers|4245|NAICS_4245_2017_SHIPMENTS||||
+247|:NAICS|Chemical and allied products merchant wholesalers|4246|NAICS_4246_2017_SHIPMENTS||||
+248|:NAICS|Petroleum and petroleum products merchant wholesalers|4247|NAICS_4247_2017_SHIPMENTS||||
+249|:NAICS|Beer, wine, and distilled alcoholic beverage merchant wholesalers|4248|NAICS_4248_2017_SHIPMENTS||||
+250|:NAICS|Miscellaneous nondurable goods merchant wholesalers|4249|NAICS_4249_2017_SHIPMENTS||||
+251|:NAICS|Electronic shopping and mail-order houses|4541|NAICS_4541_2017_SHIPMENTS||||
+252|:NAICS|Fuel dealers|45431|NAICS_45431_2017_SHIPMENTS||||
+253|:NAICS|Warehousing and storage (includes 484, Truck transportation)|4931|NAICS_4931_2017_SHIPMENTS||||
+254|:NAICS|Newspaper, periodical, book, and directory publishers (includes 51223, Music publishers)|5111|NAICS_5111_2017_SHIPMENTS||||
+255|:NAICS|Corporate, subsidiary, and regional managing offices|551114|NAICS_551114_2017_SHIPMENTS||||
+277|:Mode:NAICS:Product:Total|ALL||TOTAL_2017_SHIPMENTS|2017|||

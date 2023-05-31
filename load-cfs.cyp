@@ -3,15 +3,27 @@
 //https://mcdc.missouri.edu/geography/sumlevs/index.html
 //https://github.com/TuunicoApp/US_Census_Maps
 //https://www.census.gov/programs-surveys/cfs/technical-documentation/geographies.html
+// ./neo4j-admin database load --from-path=/full-path/data/dumps neo4j --overwrite-destination=true
+
+// create node key existence+uniqueness constraint on MetroArea
+CREATE CONSTRAINT IF NOT EXISTS FOR (n:MetroArea) REQUIRE (n.CFS_AREA) IS NODE KEY;
+
+// create rel key existence+uniqueness on Shipments (Neo4j 5.7+)
+//CREATE CONSTRAINT IF NOT EXISTS FOR ()-[r:SHIPMENT]-() REQUIRE (r.SHIPMT_ID) IS REL KEY
+
+// create text indexes on SHIPMENT rels for later aggregation lookups
+CREATE TEXT INDEX SCTG FOR ()-[r:SHIPMENT]-() ON (r.SCTG);
+CREATE TEXT INDEX NAICS FOR ()-[r:SHIPMENT]-() ON (r.NAICS);
+CREATE TEXT INDEX MODE FOR ()-[r:SHIPMENT]-() ON (r.MODE);
 
 
 //load Shipments, as rels from/to Metro Areas
-LOAD CSV WITH HEADERS
-FROM 'file:////Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/CFS_2017_PUF_CSV.csv' AS map
+:auto LOAD CSV WITH HEADERS
+FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/downloads/CFS_2017_PUF_CSV.csv' AS map
 FIELDTERMINATOR ','
-WITH  apoc.map.clean(map,[],['']) AS s
 CALL {
-  WITH s
+  WITH map
+  WITH apoc.map.clean(map,[],['']) AS s
   MERGE (o:MetroArea {CFS_AREA: s.ORIG_CFS_AREA})
   WITH s,o
   MERGE (d:MetroArea {CFS_AREA: s.DEST_CFS_AREA})
@@ -25,12 +37,9 @@ CALL {
   r.SHIPMT_VALUE = toInteger(s.SHIPMT_VALUE),
   r.SCTG = 'SCTG_'+ s.SCTG,
   r.MODE = 'MODE_'+ s.MODE
-} IN TRANSACTIONS OF 1000 ROWS;
+} IN TRANSACTIONS OF 500 ROWS;
 
-// create text indexes on SHIPMENT rels for later aggregation lookups
-CREATE TEXT INDEX SCTG FOR ()-[r:SHIPMENT]-() ON (r.SCTG);
-CREATE TEXT INDEX NAICS FOR ()-[r:SHIPMENT]-() ON (r.NAICS);
-CREATE TEXT INDEX MODE FOR ()-[r:SHIPMENT]-() ON (r.MODE);
+//Set 167398644 properties, created 5978523 relationships, completed after 843569 ms.
 
 //load Metrics
 LOAD CSV WITH HEADERS

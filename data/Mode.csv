@@ -20,4 +20,4 @@ _id|_labels|DESCRIPTION|MODE|SUBGRAPH|YEAR|_start|_end|_type
 274|:Mode|Rail and water|MODE_17|MODE_17_2017_SHIPMENTS||||
 275|:Mode|Other multiple mode|MODE_18|MODE_18_2017_SHIPMENTS||||
 276|:Mode|Mode suppressed|MODE_00|MODE_00_2017_SHIPMENTS||||
-277|:Mode:NAICS:Product:Total|ALL||TOTAL_2017_SHIPMENTS|2017|||
+277|:Mode:NAICS:Product:Total|ALL|ALL|TOTAL_2017_SHIPMENTS|2017|||

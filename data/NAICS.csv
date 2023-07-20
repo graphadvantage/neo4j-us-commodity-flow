@@ -44,4 +44,4 @@ _id|_labels|DESCRIPTION|NAICS|SUBGRAPH|YEAR|_start|_end|_type
 253|:NAICS|Warehousing and storage (includes 484, Truck transportation)|4931|NAICS_4931_2017_SHIPMENTS||||
 254|:NAICS|Newspaper, periodical, book, and directory publishers (includes 51223, Music publishers)|5111|NAICS_5111_2017_SHIPMENTS||||
 255|:NAICS|Corporate, subsidiary, and regional managing offices|551114|NAICS_551114_2017_SHIPMENTS||||
-277|:Mode:NAICS:Product:Total|ALL||TOTAL_2017_SHIPMENTS|2017|||
+277|:Mode:NAICS:Product:Total|ALL|ALL|TOTAL_2017_SHIPMENTS|2017|||

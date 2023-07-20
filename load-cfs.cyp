@@ -53,28 +53,32 @@ LOAD CSV WITH HEADERS
 FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/MetroArea.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
-MERGE (n:MetroArea {CFS_AREA: mc.CFS_AREA});
+MERGE (n:MetroArea {CFS_AREA: mc.CFS_AREA})
+SET n+=mc;
 
 //load Modes
 LOAD CSV WITH HEADERS
 FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/Mode.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
-MERGE (n:Mode {MODE: mc.MODE});
+MERGE (n:Mode {MODE: mc.MODE})
+SET n+=mc;
 
 //load NAICS
 LOAD CSV WITH HEADERS
 FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/NAICS.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
-MERGE (n:NAICS {NAICS: mc.NAICS});
+MERGE (n:NAICS {NAICS: mc.NAICS})
+SET n+=mc;
 
 //load Products
 LOAD CSV WITH HEADERS
 FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/Product.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
-MERGE (n:Product {SCTG: mc.SCTG});
+MERGE (n:Product {SCTG: mc.SCTG})
+SET n+=mc;
 
 // load Totals node (for NeoDash parameter 'ALL')
 MERGE (n:Total:Product:NAICS:Mode)
@@ -85,7 +89,8 @@ LOAD CSV WITH HEADERS
 FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/State.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
-MERGE (n:State {GEOID: mc.GEOID});
+MERGE (n:State {GEOID: mc.GEOID})
+SET n+=mc;
 
 //join States to Metros
 MATCH (n:MetroArea),(s:State)

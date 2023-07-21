@@ -2,16 +2,15 @@
 NeoDash analysis of US Census 2017 CFS data
 
 Quick start
+* install Neo4j from https://neo4j.com/download-center/, install plugins for Apoc, Graph Data Science
 
-* aggregated shipments = > import the [totals dump file](https://drive.google.com/file/d/1aMLFukdmp7GmX2EQljDqIHddal5DIDgw/view?usp=share_link) into a Neo4j 5.5 database
+* download and import the [neo4j.dump file](https://drive.google.com/file/d/1gR24H5ngbRvklwDPHpP1k94lqutO5DXN/view?usp=sharing) into a Neo4j 5.10 database
 
--or-
+```
+./bin/neo4j-admin load --force --database=neo4j --from=[PATH TO]/neo4j.dump
+```
 
-* all 6M shipments => import the [shipments dump file](https://drive.google.com/file/d/1qFGvkC4K55wIterbh_q_KklW1bCMfsVy/view?usp=share_link) into a Neo4j 5.5 database
-
--next-
-
-* open NeoDash from the Neo4j desktop, connect to Neo4j and import dashboard.json from this repo (you can save your changes back to Neo4j)
+* install and launch NeoDash from the Neo4j desktop, connect to Neo4j and import dashboard.json from this repo or load it from the Neo4j database
 
 Build
 
@@ -19,18 +18,16 @@ Build
 
 * run the queries in load.cyp to ingest the data sets
 
-* run the python notebooks to create the aggregating relationships for Product, NAICS and Mode from the raw :SHIPMENT relationship
+* run the python notebook to create the aggregating relationships for Product, NAICS, Mode and HAZMAT from the raw :SHIPMENT relationships
 
 * run the queries in gds-pagerank.cyp to compute Page Rank centrality for the CFS_AREA MSAs with respect to Product and NAICS for both import and export flows
-
-WIP - GHG emissions
-
 
 Dependencies
 
 copy /misc/apoc.conf to Neo4j /conf folder
 
-Install APOC and Graph Data Science Plugins
+install [Apoc](https://github.com/neo4j/apoc/releases), [Apoc Extended](https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases) and [Graph Data Science Plugins](https://github.com/neo4j/graph-data-science/releases)
+
 
 Neo4j Settings (neo4j.conf) configurations
 
@@ -53,5 +50,3 @@ server.memory.heap.max_size=4g
 server.memory.pagecache.size=4g
 
 ```
-
-comment out any lines at the bottom of neo4j.conf that conflict with these settings.

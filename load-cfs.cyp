@@ -19,7 +19,7 @@ CREATE TEXT INDEX MODE FOR ()-[r:SHIPMENT]-() ON (r.HAZMAT);
 
 //load Shipments, as rels from/to Metro Areas
 :auto LOAD CSV WITH HEADERS
-FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/downloads/CFS_2017_PUF_CSV.csv' AS map
+FROM 'file:///[PATH TO]/GitHub/neo4j-us-commodity-flow/downloads/CFS_2017_PUF_CSV.csv' AS map
 FIELDTERMINATOR ','
 CALL {
   WITH map
@@ -43,14 +43,14 @@ CALL {
 
 //load Metrics
 LOAD CSV WITH HEADERS
-FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/Metric.csv' AS map
+FROM 'file:///[PATH TO]/GitHub/neo4j-us-commodity-flow/data/Metric.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
 MERGE (n:Metric {METRIC: mc.METRIC});
 
 //load MetroAreas
 LOAD CSV WITH HEADERS
-FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/MetroArea.csv' AS map
+FROM 'file:///[PATH TO]/GitHub/neo4j-us-commodity-flow/data/MetroArea.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
 MERGE (n:MetroArea {CFS_AREA: mc.CFS_AREA})
@@ -59,7 +59,7 @@ n.geopoint =  point({latitude: toFloat(n.INTPTLAT), longitude: toFloat(n.INTPTLO
 
 //load Modes
 LOAD CSV WITH HEADERS
-FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/Mode.csv' AS map
+FROM 'file:///[PATH TO]/GitHub/neo4j-us-commodity-flow/data/Mode.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
 MERGE (n:Mode {MODE: mc.MODE})
@@ -67,7 +67,7 @@ SET n+=mc;
 
 //load NAICS
 LOAD CSV WITH HEADERS
-FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/NAICS.csv' AS map
+FROM 'file:///[PATH TO]/GitHub/neo4j-us-commodity-flow/data/NAICS.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
 MERGE (n:NAICS {NAICS: mc.NAICS})
@@ -75,7 +75,7 @@ SET n+=mc;
 
 //load Products
 LOAD CSV WITH HEADERS
-FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/Product.csv' AS map
+FROM 'file:///[PATH TO]/GitHub/neo4j-us-commodity-flow/data/Product.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
 MERGE (n:Product {SCTG: mc.SCTG})
@@ -87,7 +87,7 @@ SET n.SUBGRAPH = 'TOTAL_2017_SHIPMENTS', n.DESCRIPTION ='ALL', n.YEAR = '2017';
 
 //load States
 LOAD CSV WITH HEADERS
-FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/State.csv' AS map
+FROM 'file:///[PATH TO]/GitHub/neo4j-us-commodity-flow/data/State.csv' AS map
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
 MERGE (n:State {GEOID: mc.GEOID})
@@ -140,4 +140,4 @@ r.TOTAL_ANN_MILES_GC = TOTAL_ANN_MILES_GC,
 r.TOTAL_AVG_MILES_PER_SHIPMENT = ROUND((TOTAL_ANN_WGT_MILES*1.0)/sum_wgt_factor)
 ", {batchSize:10000, iterateList:true, parallel:false});
 
-// now run the jupyter notebooks to compute the annual summaries by NAICS, Product and Mode
+// now run the jupyter notebooks to compute the annual summaries by NAICS, Product, Mode and HAZMAT

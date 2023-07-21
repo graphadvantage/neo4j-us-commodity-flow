@@ -2,7 +2,7 @@
   "title": "US Census Public Use Files: 2017 Commodity Flow Survey",
   "version": "2.3",
   "settings": {
-    "pagenumber": 4,
+    "pagenumber": 1,
     "editable": false,
     "fullscreenEnabled": false,
     "parameters": {
@@ -20,8 +20,8 @@
       "neodash_naics_description_display": "Computer and electronic product manufacturing",
       "neodash_state_name": "California",
       "neodash_state_name_display": "California",
-      "neodash_state_name_d": "California",
-      "neodash_state_name_d_display": "California",
+      "neodash_state_name_d": "ALL",
+      "neodash_state_name_d_display": "ALL",
       "neodash_mode_mode": "",
       "neodash_mode_mode_display": "",
       "neodash_metric_metric": "TOTAL_ANN_SHIPMENTS",
@@ -181,7 +181,7 @@
         },
         {
           "title": "CFS Routes Map",
-          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path LIMIT 10\n\n\n\n\n",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") WITH o,r,d WHERE o <> d RETURN o,r,d ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 1000',{}) YIELD value\nWITH value.o AS o, value.r AS r, value.d AS d\nWHERE o <> d \nWITH o, d, r {.*, TOTAL_ANN_VALUE_B: CASE WHEN r.TOTAL_ANN_VALUE/1000000000 < 1 THEN 0.2 ELSE r.TOTAL_ANN_VALUE/1000000000 END } AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n\n\n\n\n\n",
           "width": 12,
           "height": 5,
           "x": 0,
@@ -196,17 +196,18 @@
             "defaultNodeSize": "small",
             "refreshButtonEnabled": true,
             "clusterMarkers": false,
-            "defaultRelWidth": 1.5,
-            "defaultRelColor": "#666",
+            "defaultRelWidth": 1,
+            "defaultRelColor": "#85bb65 ",
             "downloadImageEnabled": true,
             "layerType": "markers",
-            "backgroundColor": "#FFFFFF"
+            "backgroundColor": "#FFFFFF",
+            "relWidthProp": "TOTAL_ANN_VALUE_B"
           },
           "id": "45adba60-6ebb-47f0-b158-90d16021824e"
         },
         {
-          "title": "Total Value (USD Millions)",
-          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "title": "Total Value (USD Billions)",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000000,3) AS total_value_millions",
           "width": 3,
           "height": 1,
           "x": 9,
@@ -370,7 +371,7 @@
         },
         {
           "title": "CFS Routes Map",
-          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path, value.r\n\n\n\n",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") WITH o,r,d WHERE o <> d RETURN o,r,d ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 1000',{}) YIELD value\nWITH value.o AS o, value.r AS r, value.d AS d\nWITH o, d, r {.*, TOTAL_ANN_VALUE_B: CASE WHEN r.TOTAL_ANN_VALUE/1000000000 < 1 THEN 0.2 ELSE r.TOTAL_ANN_VALUE/1000000000 END } AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n\n\n\n",
           "width": 12,
           "height": 5,
           "x": 0,
@@ -385,16 +386,17 @@
             "defaultNodeSize": "small",
             "refreshButtonEnabled": true,
             "clusterMarkers": false,
-            "defaultRelWidth": 1.5,
-            "defaultRelColor": "#666",
+            "defaultRelWidth": 1,
+            "defaultRelColor": "#85bb65",
             "downloadImageEnabled": true,
-            "layerType": "markers"
+            "layerType": "markers",
+            "relWidthProp": "TOTAL_ANN_VALUE_B"
           },
           "id": "d07630f4-7865-4b4d-be7b-7b646535dec7"
         },
         {
-          "title": "Total Value (USD Millions)",
-          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000) AS total_value_millions",
+          "title": "Total Value (USD Billions)",
+          "query": "MATCH (p:NAICS {DESCRIPTION:$neodash_naics_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN SUM(r.TOTAL_ANN_VALUE) AS total',{}) YIELD value\nRETURN ROUND(value.total/1000000000,3) AS total_value_millions",
           "width": 3,
           "height": 1,
           "x": 9,
@@ -779,7 +781,7 @@
         {
           "id": "21f80ada-96d0-46d1-9b50-d0b81f7c42ce",
           "title": "HAZMAT by Modes with Rail",
-          "query": "MATCH p=(o)-[r:HAZMAT_MODE_17_2017_SHIPMENTS|HAZMAT_MODE_15_2017_SHIPMENTS|HAZMAT_MODE_06_2017_SHIPMENTS]->(d)\nWHERE o <> d \nWITH o,d, r {.*, TOTAL_ANN_TONNAGE_100K: r.TOTAL_ANN_TONNAGE/100000} AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n",
+          "query": "MATCH p=(o)-[r:HAZMAT_MODE_17_2017_SHIPMENTS|HAZMAT_MODE_15_2017_SHIPMENTS|HAZMAT_MODE_06_2017_SHIPMENTS]->(d)\nWHERE o <> d \nWITH o,d, r {.*, TOTAL_ANN_TONNAGE_100K: CASE WHEN r.TOTAL_ANN_TONNAGE/100000 < 1 THEN 0.2 ELSE r.TOTAL_ANN_TONNAGE/100000 END } AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n",
           "width": 11,
           "height": 5,
           "x": 0,
@@ -800,7 +802,7 @@
         {
           "id": "e486d5c8-2640-4c28-9295-75d06f1893a9",
           "title": "HAZMAT by Modes with Water",
-          "query": "MATCH p=(o)-[r:HAZMAT_MODE_17_2017_SHIPMENTS|HAZMAT_MODE_16_2017_SHIPMENTS|HAZMAT_MODE_08_2017_SHIPMENTS|HAZMAT_MODE_07_2017_SHIPMENTS]->(d) \nWHERE o <> d \nWITH o,d, r {.*, TOTAL_ANN_TONNAGE_100K: r.TOTAL_ANN_TONNAGE/100000} AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n\n",
+          "query": "MATCH p=(o)-[r:HAZMAT_MODE_17_2017_SHIPMENTS|HAZMAT_MODE_16_2017_SHIPMENTS|HAZMAT_MODE_08_2017_SHIPMENTS|HAZMAT_MODE_07_2017_SHIPMENTS]->(d) \nWHERE o <> d \nWITH o,d, r {.*, TOTAL_ANN_TONNAGE_100K: CASE WHEN r.TOTAL_ANN_TONNAGE/100000 < 1 THEN 0.2 ELSE r.TOTAL_ANN_TONNAGE/100000 END} AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n\n",
           "width": 11,
           "height": 5,
           "x": 0,

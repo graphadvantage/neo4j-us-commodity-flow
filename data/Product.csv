@@ -41,5 +41,4 @@ _id|_labels|DESCRIPTION|SCTG|SUBGRAPH|YEAR|_start|_end|_type
 208|:Product|Miscellaneous Manufactured Products|SCTG_40|SCTG_40_2017_SHIPMENTS||||
 209|:Product|Waste and Scrap (excludes of agriculture or food, see 041xx)|SCTG_41|SCTG_41_2017_SHIPMENTS||||
 210|:Product|Commodity code suppressed|SCTG_00|SCTG_00_2017_SHIPMENTS||||
-277|:Mode:NAICS:Product:Total|ALL|ALL|TOTAL_2017_SHIPMENTS|2017|||
 336|:Product|Mixed Freight|SCTG_43|||||

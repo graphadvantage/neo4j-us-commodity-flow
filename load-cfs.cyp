@@ -6,7 +6,7 @@
 // ./neo4j-admin database load --from-path=/full-path/data/dumps neo4j --overwrite-destination=true
 
 // create node key existence+uniqueness constraint on MetroArea
-CREATE CONSTRAINT IF NOT EXISTS FOR (n:MetroArea) REQUIRE (n.CFS_AREA) IS NODE KEY;
+CREATE CONSTRAINT IF NOT EXISTS FOR (n:MetroArea) REQUIRE (n.CFS_AREA) IS UNIQUE;
 
 // create rel key existence+uniqueness on Shipments (Neo4j 5.7+)
 //CREATE CONSTRAINT IF NOT EXISTS FOR ()-[r:SHIPMENT]-() REQUIRE (r.SHIPMT_ID) IS REL KEY
@@ -15,7 +15,7 @@ CREATE CONSTRAINT IF NOT EXISTS FOR (n:MetroArea) REQUIRE (n.CFS_AREA) IS NODE K
 CREATE TEXT INDEX SCTG FOR ()-[r:SHIPMENT]-() ON (r.SCTG);
 CREATE TEXT INDEX NAICS FOR ()-[r:SHIPMENT]-() ON (r.NAICS);
 CREATE TEXT INDEX MODE FOR ()-[r:SHIPMENT]-() ON (r.MODE);
-
+CREATE TEXT INDEX MODE FOR ()-[r:SHIPMENT]-() ON (r.HAZMAT);
 
 //load Shipments, as rels from/to Metro Areas
 :auto LOAD CSV WITH HEADERS
@@ -54,7 +54,8 @@ FROM 'file:///Users/michaelmoore/Documents/GitHub/neo4j-us-commodity-flow/data/M
 FIELDTERMINATOR '|'
 WITH apoc.map.clean(map,['_id','_start','_end','_type','_id','_labels'],['']) AS mc
 MERGE (n:MetroArea {CFS_AREA: mc.CFS_AREA})
-SET n+=mc;
+SET n+=mc,
+n.geopoint =  point({latitude: toFloat(n.INTPTLAT), longitude: toFloat(n.INTPTLON)});
 
 //load Modes
 LOAD CSV WITH HEADERS
@@ -82,7 +83,7 @@ SET n+=mc;
 
 // load Totals node (for NeoDash parameter 'ALL')
 MERGE (n:Total:Product:NAICS:Mode)
-SET n.SUBGRAPH = 'TOTAL_2017_SHIPMENTS', n.DESCRIPTION ='ALL', n.YEAR = '2017'
+SET n.SUBGRAPH = 'TOTAL_2017_SHIPMENTS', n.DESCRIPTION ='ALL', n.YEAR = '2017';
 
 //load States
 LOAD CSV WITH HEADERS

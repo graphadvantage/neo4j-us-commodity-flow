@@ -1,35 +1,39 @@
 {
   "title": "US Census Public Use Files: 2017 Commodity Flow Survey",
-  "version": "2.2",
+  "version": "2.3",
   "settings": {
     "pagenumber": 4,
-    "editable": true,
+    "editable": false,
     "fullscreenEnabled": false,
     "parameters": {
-      "neodash_product_description": "ALL",
-      "neodash_product_description_display": "ALL",
+      "neodash_product_description": "Electronic and Other Electrical Equipment and Components, and Office Equipment",
+      "neodash_product_description_display": "Electronic and Other Electrical Equipment and Components, and Office Equipment",
       "neodash_metroarea_cfs_area": "",
       "neodash_metroarea_cfs_area_display": "",
       "neodash_metroarea_state_d": "ALL",
       "neodash_metroarea_state_d_display": "ALL",
       "neodash_metroarea_state_o": "ALL",
       "neodash_metroarea_state_o_display": "ALL",
-      "neodash_state_name_o": "ALL",
-      "neodash_state_name_o_display": "ALL",
-      "neodash_naics_description": "ALL",
-      "neodash_naics_description_display": "ALL",
-      "neodash_state_name": "Texas",
-      "neodash_state_name_display": "Texas",
-      "neodash_state_name_d": "ALL",
-      "neodash_state_name_d_display": "ALL",
+      "neodash_state_name_o": "Texas",
+      "neodash_state_name_o_display": "Texas",
+      "neodash_naics_description": "Computer and electronic product manufacturing",
+      "neodash_naics_description_display": "Computer and electronic product manufacturing",
+      "neodash_state_name": "California",
+      "neodash_state_name_display": "California",
+      "neodash_state_name_d": "California",
+      "neodash_state_name_d_display": "California",
       "neodash_mode_mode": "",
       "neodash_mode_mode_display": "",
-      "neodash_mode_description": "Rail",
-      "neodash_mode_description_display": "Rail",
       "neodash_metric_metric": "TOTAL_ANN_SHIPMENTS",
       "neodash_metric_metric_display": "TOTAL_ANN_SHIPMENTS",
       "undefined": "ALL",
-      "undefined_display": "ALL"
+      "undefined_display": "ALL",
+      "neodash_match_(n:mode)_where_tolower(n.description)_contains_'rail'_or__tolower(n.description)_contains_'water'_return_collect(n.mode)_as_values__q": "Truck and water",
+      "neodash_match_(n:mode)_where_tolower(n.description)_contains_'rail'_or__tolower(n.description)_contains_'water'_return_collect(n.mode)_as_values__q_display": "Truck and water",
+      "neodash_rail_water_modes": "",
+      "neodash_rail_water_modes_display": "",
+      "neodash_mode_description": "Rail",
+      "neodash_mode_description_display": "Rail"
     },
     "downloadImageEnabled": true
   },
@@ -54,7 +58,8 @@
             "propertyTypeDisplay": "DESCRIPTION",
             "parameterName": "neodash_product_description",
             "defaultValue": "ALL"
-          }
+          },
+          "id": "1b323db4-4766-4d76-bb0d-8edc6b877831"
         },
         {
           "title": "CFS Routes Graph",
@@ -84,7 +89,8 @@
                 "customizationValue": "black"
               }
             ]
-          }
+          },
+          "id": "231ca62b-cd3d-40ad-bbd0-6ad0b65f30a6"
         },
         {
           "title": "Inter-Metro CFS Routes by Total Value, excludes Intra-Metro",
@@ -107,7 +113,8 @@
             "labelOrientation": "horizontal",
             "layout": "horizontal",
             "fullscreenEnabled": true
-          }
+          },
+          "id": "5f37189f-bc6b-4653-8c4b-844cfddec46d"
         },
         {
           "title": "CFS Routes by Total Value, includes Intra-Metro",
@@ -125,7 +132,8 @@
             "allowDownload": true,
             "compact": false,
             "columnWidths": "[3,3,1,1,1,1,1,1]"
-          }
+          },
+          "id": "59e23a35-699f-49ba-aec8-4c2b0774ea22"
         },
         {
           "title": "Origin",
@@ -147,7 +155,8 @@
             "propertyType": "NAME",
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_o"
-          }
+          },
+          "id": "7906f21b-3a53-4141-85e8-3236160a8a48"
         },
         {
           "title": "Destination",
@@ -167,11 +176,12 @@
             "propertyType": "NAME",
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d"
-          }
+          },
+          "id": "0021de9a-dcd7-43e3-bef0-73b8eadb6cbd"
         },
         {
           "title": "CFS Routes Map",
-          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path, value.r\n\n\n\n",
+          "query": "MATCH (p:Product {DESCRIPTION:$neodash_product_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path,r ORDER BY r.TOTAL_ANN_VALUE DESC LIMIT 250',{}) YIELD value\nRETURN value.path LIMIT 10\n\n\n\n\n",
           "width": 12,
           "height": 5,
           "x": 0,
@@ -189,8 +199,10 @@
             "defaultRelWidth": 1.5,
             "defaultRelColor": "#666",
             "downloadImageEnabled": true,
-            "layerType": "markers"
-          }
+            "layerType": "markers",
+            "backgroundColor": "#FFFFFF"
+          },
+          "id": "45adba60-6ebb-47f0-b158-90d16021824e"
         },
         {
           "title": "Total Value (USD Millions)",
@@ -210,7 +222,8 @@
             "propertyType": "NAME",
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d"
-          }
+          },
+          "id": "abd4f6a5-424e-46ef-a2d6-0953a7691856"
         }
       ]
     },
@@ -234,7 +247,8 @@
             "propertyType": "DESCRIPTION",
             "propertyTypeDisplay": "DESCRIPTION",
             "parameterName": "neodash_naics_description"
-          }
+          },
+          "id": "449b0fa2-321f-4e3a-b9f0-8ec8b01a15dc"
         },
         {
           "title": "CFS Routes Graph",
@@ -264,7 +278,8 @@
                 "customizationValue": "black"
               }
             ]
-          }
+          },
+          "id": "3b6480e2-960f-4660-b6f9-8fb0d3fcaa6e"
         },
         {
           "title": "Inter-Metro CFS Routes by Total Value, excludes Intra-Metro",
@@ -287,7 +302,8 @@
             "labelOrientation": "horizontal",
             "layout": "horizontal",
             "fullscreenEnabled": true
-          }
+          },
+          "id": "6aa0fdf7-760c-4504-bb9b-310dd57d1d48"
         },
         {
           "title": "CFS Routes by Total Value, includes Intra-Metro",
@@ -305,7 +321,8 @@
             "allowDownload": true,
             "compact": false,
             "columnWidths": "[3,2,1,1,1,1,1,1]"
-          }
+          },
+          "id": "de1f4acf-64f7-425a-985b-3ea970074d05"
         },
         {
           "title": "Origin",
@@ -327,7 +344,8 @@
             "propertyType": "NAME",
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_o"
-          }
+          },
+          "id": "e867239a-bbce-49ab-a2d6-9a23fc8365b4"
         },
         {
           "title": "Destination",
@@ -347,7 +365,8 @@
             "propertyType": "NAME",
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d"
-          }
+          },
+          "id": "b6a8a040-3fe6-49d9-b763-d88a160860dd"
         },
         {
           "title": "CFS Routes Map",
@@ -370,7 +389,8 @@
             "defaultRelColor": "#666",
             "downloadImageEnabled": true,
             "layerType": "markers"
-          }
+          },
+          "id": "d07630f4-7865-4b4d-be7b-7b646535dec7"
         },
         {
           "title": "Total Value (USD Millions)",
@@ -390,7 +410,8 @@
             "propertyType": "NAME",
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d"
-          }
+          },
+          "id": "6bc1354c-9af1-4767-ad31-7d35a51dc587"
         }
       ]
     },
@@ -409,7 +430,8 @@
           "settings": {
             "columnWidths": "[2,1,1,2,1]",
             "refreshButtonEnabled": true
-          }
+          },
+          "id": "01b30462-405f-4c67-8bac-3d93b4bbbfd7"
         },
         {
           "title": "Total Import Value (USD Millions)",
@@ -428,7 +450,8 @@
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d",
             "defaultValue": "ALL"
-          }
+          },
+          "id": "4874a60e-c85d-456d-bef6-1e8fd117088b"
         },
         {
           "title": "Top 100 MSAs Import Centrality by Total Annual Value",
@@ -448,7 +471,8 @@
             "layout": "force-directed",
             "nodeColorScheme": "set1",
             "refreshButtonEnabled": true
-          }
+          },
+          "id": "b2824fe9-1227-47ca-8ec7-cc48e2f6700f"
         },
         {
           "title": "Top 25 MSAs Export Centrality by Total Annual Value",
@@ -465,7 +489,8 @@
           "settings": {
             "nodePositions": {},
             "labelProperty": "PAGERANK_EXPORT"
-          }
+          },
+          "id": "32a831b1-d970-486b-a077-4af6bd105112"
         },
         {
           "title": "Product",
@@ -485,7 +510,8 @@
             "propertyTypeDisplay": "DESCRIPTION",
             "parameterName": "neodash_product_description",
             "suggestionLimit": 50
-          }
+          },
+          "id": "fe38cb88-0e46-4534-95e8-69b8248a8b12"
         },
         {
           "title": "Top 25 MSAs Import Centrality by Total Annual Value",
@@ -502,7 +528,8 @@
           "settings": {
             "nodePositions": {},
             "labelProperty": "PAGERANK_IMPORT"
-          }
+          },
+          "id": "80fa401b-1540-446e-9ab0-ec50b5308479"
         },
         {
           "title": "State",
@@ -521,7 +548,8 @@
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name",
             "defaultValue": "ALL"
-          }
+          },
+          "id": "f9d33193-36f7-4fe0-be71-8413c9ecc7e4"
         },
         {
           "title": "Top 100 MSAs Export Centrality by Total Annual Value",
@@ -541,7 +569,8 @@
             "layout": "force-directed",
             "nodeColorScheme": "set1",
             "refreshButtonEnabled": true
-          }
+          },
+          "id": "037b4ab4-99da-4cd8-bbb8-380f6d294aa8"
         },
         {
           "title": "Total Export Value (USD Millions)",
@@ -560,7 +589,8 @@
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d",
             "defaultValue": "ALL"
-          }
+          },
+          "id": "c5666f84-8b53-48eb-8c8a-7d8e6d804a3a"
         }
       ]
     },
@@ -579,7 +609,8 @@
           "settings": {
             "columnWidths": "[2,1,1,2,1]",
             "refreshButtonEnabled": true
-          }
+          },
+          "id": "a050f9d8-d02d-44de-ac6a-936a7133ac6c"
         },
         {
           "title": "Total Import Value (USD Millions)",
@@ -598,7 +629,8 @@
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d",
             "defaultValue": "ALL"
-          }
+          },
+          "id": "f255dd10-e2ce-4d9a-8ba8-a571391e685d"
         },
         {
           "title": "Top 100 MSAs Import Centrality by Total Annual Value",
@@ -618,7 +650,8 @@
             "layout": "force-directed",
             "nodeColorScheme": "set1",
             "refreshButtonEnabled": true
-          }
+          },
+          "id": "37f7a380-c2ea-41aa-a90b-cdeb083fb1bb"
         },
         {
           "title": "Top 25 MSAs Export Centrality by Total Annual Value",
@@ -635,7 +668,8 @@
           "settings": {
             "nodePositions": {},
             "labelProperty": "PAGERANK_EXPORT"
-          }
+          },
+          "id": "527aff21-d093-49dc-82bb-ac744adcfd15"
         },
         {
           "title": "NAICS",
@@ -655,7 +689,8 @@
             "propertyType": "DESCRIPTION",
             "propertyTypeDisplay": "DESCRIPTION",
             "parameterName": "neodash_naics_description"
-          }
+          },
+          "id": "4b07a97b-dc07-4f15-a19f-aad7d8cd91ae"
         },
         {
           "title": "Top 25 MSAs Import Centrality by Total Annual Value",
@@ -672,7 +707,8 @@
           "settings": {
             "nodePositions": {},
             "labelProperty": "PAGERANK_IMPORT"
-          }
+          },
+          "id": "e0962545-a9a5-469b-a4f4-09ed084486c8"
         },
         {
           "title": "State",
@@ -691,7 +727,8 @@
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name",
             "defaultValue": "ALL"
-          }
+          },
+          "id": "e38e97e9-3e67-4ae4-b672-6b810dd9415f"
         },
         {
           "title": "Top 100 MSAs Export Centrality by Total Annual Value",
@@ -711,7 +748,8 @@
             "layout": "force-directed",
             "nodeColorScheme": "set1",
             "refreshButtonEnabled": true
-          }
+          },
+          "id": "7a66b54d-9e7f-4573-9843-f907ab784a42"
         },
         {
           "title": "Total Export Value (USD Millions)",
@@ -730,138 +768,55 @@
             "propertyTypeDisplay": "NAME",
             "parameterName": "neodash_state_name_d",
             "defaultValue": "ALL"
-          }
+          },
+          "id": "6fd959bd-0ac6-4f84-8a2c-f740e0ac12dd"
         }
       ]
     },
     {
-      "title": "Mode & Carbon Emissions",
+      "title": "HAZMAT by Rail & Water",
       "reports": [
         {
-          "title": "Mode",
-          "query": "MATCH (n:`undefined`) \nWHERE toLower(toString(n.`undefined`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`undefined` as value,  n.`undefined` as display ORDER BY size(toString(value)) ASC LIMIT 25",
-          "width": 3,
-          "height": 1,
-          "x": 6,
-          "y": 0,
-          "type": "select",
-          "selection": {},
-          "settings": {
-            "nodePositions": {},
-            "type": "Node Property",
-            "defaultValue": "ALL",
-            "suggestionLimit": 25,
-            "clearParameterOnFieldClear": false
-          }
-        },
-        {
-          "title": "Origin",
-          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
-          "width": 3,
-          "height": 1,
+          "id": "21f80ada-96d0-46d1-9b50-d0b81f7c42ce",
+          "title": "HAZMAT by Modes with Rail",
+          "query": "MATCH p=(o)-[r:HAZMAT_MODE_17_2017_SHIPMENTS|HAZMAT_MODE_15_2017_SHIPMENTS|HAZMAT_MODE_06_2017_SHIPMENTS]->(d)\nWHERE o <> d \nWITH o,d, r {.*, TOTAL_ANN_TONNAGE_100K: r.TOTAL_ANN_TONNAGE/100000} AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n",
+          "width": 11,
+          "height": 5,
           "x": 0,
           "y": 0,
-          "type": "select",
-          "selection": {},
-          "settings": {
-            "nodePositions": {},
-            "type": "Node Property",
-            "entityType": "State",
-            "propertyType": "NAME",
-            "propertyTypeDisplay": "NAME",
-            "parameterName": "neodash_state_name_o",
-            "id": "o",
-            "defaultValue": "ALL"
-          }
-        },
-        {
-          "title": "Destination",
-          "query": "MATCH (n:`State`) \nWHERE toLower(toString(n.`NAME`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`NAME` as value,  n.`NAME` as display ORDER BY size(toString(value)) ASC LIMIT 5",
-          "width": 3,
-          "height": 1,
-          "x": 3,
-          "y": 0,
-          "type": "select",
-          "selection": {},
-          "settings": {
-            "nodePositions": {},
-            "type": "Node Property",
-            "entityType": "State",
-            "propertyType": "NAME",
-            "propertyTypeDisplay": "NAME",
-            "parameterName": "neodash_state_name_d",
-            "id": "d",
-            "defaultValue": "ALL",
-            "suggestionLimit": 5
-          }
-        },
-        {
-          "title": "Mode Distribution (All Shipments)",
-          "query": "MATCH (p:Mode)\nWHERE p.DESCRIPTION <> \"ALL\"\nWITH p.DESCRIPTION AS DESCRIPTION, p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN r.' +$neodash_metric_metric+ ' AS metric',{}) YIELD value\nRETURN DESCRIPTION, SUM(value.metric) AS METRIC\n\n",
-          "width": 6,
-          "height": 3,
-          "x": 0,
-          "y": 1,
-          "type": "pie",
+          "type": "map",
           "selection": {
-            "key": "(none)",
-            "index": "DESCRIPTION",
-            "value": "METRIC"
+            "MetroArea": "(no label)"
           },
           "settings": {
-            "nodePositions": {},
-            "refreshButtonEnabled": true,
-            "sortByValue": true,
-            "downloadImageEnabled": true,
-            "enableArcLinkLabels": true,
-            "marginTop": 40,
-            "colors": "set1"
-          }
-        },
-        {
-          "title": "CFS Routes Graph by Metric",
-          "query": "MATCH (p:Mode {DESCRIPTION: $neodash_mode_description})\nWITH p.SUBGRAPH AS rel\nCALL apoc.cypher.run('MATCH path = (o:MetroArea)-[r:'+rel+']->(d:MetroArea) WHERE o <> d AND (o.NAME = ' +apoc.text.toCypher($neodash_state_name_o)+ ' OR ' +apoc.text.toCypher($neodash_state_name_o)+ ' = \"ALL\") AND (d.NAME = ' +apoc.text.toCypher($neodash_state_name_d)+ ' OR ' +apoc.text.toCypher($neodash_state_name_d)+' = \"ALL\") RETURN path ORDER BY r.'+$neodash_metric_metric+' DESC LIMIT 100',{}) YIELD value\nRETURN value.path\n\n\n",
-          "width": 6,
-          "height": 3,
-          "x": 6,
-          "y": 1,
-          "type": "graph",
-          "selection": {
-            "MetroArea": "DESCRIPTION"
-          },
-          "settings": {
-            "nodePositions": {},
-            "refreshButtonEnabled": true,
-            "sortByValue": true,
-            "downloadImageEnabled": true,
-            "enableArcLinkLabels": true,
-            "marginTop": 40,
-            "colors": "paired",
-            "labelProperty": "TOTAL_ANN_VALUE",
+            "layerType": "markers",
+            "defaultNodeSize": "small",
             "nodeColorScheme": "set1",
-            "showPropertiesOnHover": false,
-            "relationshipParticles": true
+            "clusterMarkers": false,
+            "relWidthProp": "TOTAL_ANN_TONNAGE_100K",
+            "defaultRelColor": "#ff4f00"
           }
         },
         {
-          "title": "Metric",
-          "query": "MATCH (n:`Metric`) \nWHERE toLower(toString(n.`METRIC`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`METRIC` as value,  n.`METRIC` as display ORDER BY size(toString(value)) ASC LIMIT 25",
-          "width": 3,
-          "height": 1,
-          "x": 9,
-          "y": 0,
-          "type": "select",
-          "selection": {},
+          "id": "e486d5c8-2640-4c28-9295-75d06f1893a9",
+          "title": "HAZMAT by Modes with Water",
+          "query": "MATCH p=(o)-[r:HAZMAT_MODE_17_2017_SHIPMENTS|HAZMAT_MODE_16_2017_SHIPMENTS|HAZMAT_MODE_08_2017_SHIPMENTS|HAZMAT_MODE_07_2017_SHIPMENTS]->(d) \nWHERE o <> d \nWITH o,d, r {.*, TOTAL_ANN_TONNAGE_100K: r.TOTAL_ANN_TONNAGE/100000} AS rel, type(r) AS typ\nRETURN o, apoc.create.vRelationship(o,typ,rel,d) AS r, d\n\n",
+          "width": 11,
+          "height": 5,
+          "x": 0,
+          "y": 5,
+          "type": "map",
+          "selection": {
+            "MetroArea": "(no label)"
+          },
           "settings": {
-            "nodePositions": {},
-            "type": "Node Property",
-            "defaultValue": "ALL",
-            "suggestionLimit": 25,
-            "entityType": "Metric",
-            "propertyType": "METRIC",
-            "propertyTypeDisplay": "METRIC",
-            "parameterName": "neodash_metric_metric",
-            "clearParameterOnFieldClear": false
+            "layerType": "markers",
+            "defaultNodeSize": "small",
+            "nodeColorScheme": "category10",
+            "clusterMarkers": false,
+            "relWidthProp": "TOTAL_ANN_TONNAGE_100K",
+            "defaultRelWidth": 1,
+            "defaultRelColor": "#ff4f00"
           }
         }
       ]
@@ -869,8 +824,21 @@
   ],
   "parameters": {},
   "extensions": {
-    "advanced-charts": true,
-    "styling": true,
-    "actions": true
+    "advanced-charts": {
+      "active": true
+    },
+    "styling": {
+      "active": true
+    },
+    "active": true,
+    "activeReducers": [
+      "DASHBOARD/EXTENSIONS/QUERY_TRANSLATOR/"
+    ],
+    "query-translator": {
+      "active": true
+    },
+    "actions": {
+      "active": true
+    }
   }
 }

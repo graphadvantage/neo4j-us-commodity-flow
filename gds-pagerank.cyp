@@ -29,7 +29,7 @@ CALL {
     RETURN graph
 
     }
-RETURN graph
+RETURN graph;
 
 //PageRank MetroAreas by Product Annual Value (cypher Projection - import direction)
 CALL apoc.meta.stats() YIELD relTypesCount
@@ -62,7 +62,7 @@ CALL {
     RETURN graph
 
     }
-RETURN graph
+RETURN graph;
 
 //PageRank MetroAreas by NAICS Annual Value (cypher Projection - export direction)
 CALL apoc.meta.stats() YIELD relTypesCount
@@ -95,7 +95,7 @@ CALL {
     RETURN graph
 
     }
-RETURN graph
+RETURN graph;
 
 //PageRank MetroAreas by NAICS Annual Value (cypher Projection - import direction)
 CALL apoc.meta.stats() YIELD relTypesCount
@@ -128,4 +128,4 @@ CALL {
     RETURN graph
 
     }
-RETURN graph
+RETURN graph;

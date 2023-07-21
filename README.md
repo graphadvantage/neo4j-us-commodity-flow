@@ -1,7 +1,7 @@
 # neodash-us-commodity-flow
 NeoDash analysis of US Census 2017 CFS data
 
-![](https://drive.google.com/file/d/1aknK_vlaI3unceipuhpFuDgAYDqh9gC-/view?usp=sharing)
+![](hazmat.png)
 
 Quick start
 * install Neo4j from https://neo4j.com/download-center/, install plugins for Apoc, Graph Data Science
